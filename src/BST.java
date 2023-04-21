@@ -48,6 +48,23 @@ public class BST {
      */
     public boolean search(int val) {
         // TODO: Complete the search function
+        if (binarySearch(val, root))
+            return true;
+        return false;
+    }
+
+    public boolean binarySearch(int val, BSTNode currentNode) {
+        if (currentNode.getVal() == val)
+            return true;
+        if (currentNode.getLeft() == null && currentNode.getRight() == null) {
+            return false;
+        }
+        if (currentNode.getLeft() != null && val < currentNode.getVal()) {
+            return binarySearch(val, currentNode.getLeft());
+        }
+        if (currentNode.getRight() != null) {
+            return binarySearch(val, currentNode.getRight());
+        }
         return false;
     }
 
@@ -56,25 +73,51 @@ public class BST {
      */
     public ArrayList<BSTNode> getInorder() {
         // TODO: Complete inorder traversal
-        return null;
+        ArrayList<BSTNode> arr = new ArrayList<BSTNode>();
+        findInorder(root, arr);
+        return arr;
+    }
+
+    public void findInorder(BSTNode currentNode, ArrayList<BSTNode> arr) {
+        if (currentNode.getLeft() != null && arr.indexOf(currentNode.getLeft()) == -1)
+            findInorder(currentNode.getLeft(), arr);
+        arr.add(currentNode);
+        if (currentNode.getRight() != null && arr.indexOf(currentNode.getRight()) == -1)
+            findInorder(currentNode.getRight(), arr);
     }
 
     /**
      * @return ArrayList of BSTNodes in preorder
      */
     public ArrayList<BSTNode> getPreorder() {
-        // TODO: Complete preorder traversal
-        return null;
+        ArrayList<BSTNode> arr = new ArrayList<BSTNode>();
+        findPreorder(root, arr);
+        return arr;
     }
 
+    public void findPreorder(BSTNode currentNode, ArrayList<BSTNode> arr) {
+        arr.add(currentNode);
+        if (currentNode.getLeft() != null && arr.indexOf(currentNode.getLeft()) == -1)
+            findPreorder(currentNode.getLeft(), arr);
+        if (currentNode.getRight() != null && arr.indexOf(currentNode.getRight()) == -1)
+            findPreorder(currentNode.getRight(), arr);
+    }
     /**
      * @return ArrayList of BSTNodes in postorder
      */
     public ArrayList<BSTNode> getPostorder() {
-        // TODO: Complete postorder traversal
-        return null;
+        ArrayList<BSTNode> arr = new ArrayList<BSTNode>();
+        findPostorder(root, arr);
+        return arr;
     }
 
+    public void findPostorder(BSTNode currentNode, ArrayList<BSTNode> arr) {
+        if (currentNode.getLeft() != null && arr.indexOf(currentNode.getLeft()) == -1)
+            findPostorder(currentNode.getLeft(), arr);
+        if (currentNode.getRight() != null && arr.indexOf(currentNode.getRight()) == -1)
+            findPostorder(currentNode.getRight(), arr);
+        arr.add(currentNode);
+    }
     /**
      * Inserts the given integer value to the tree
      * if it does not already exist. Modifies the
@@ -82,7 +125,22 @@ public class BST {
      * @param val The value ot insert
      */
     public void insert(int val) {
-        // TODO: Complete insert
+        // Checks to see if the value is already in the tree
+        if (search(val))
+            return;
+        findInsert(val, root);
+    }
+
+    // Searches recursively through the tree until it reaches the correct location to insert
+    public void findInsert(int val, BSTNode currentNode) {
+        if (currentNode.getLeft() != null && val < currentNode.getVal())
+            findInsert(val, currentNode.getLeft());
+        else if (currentNode.getRight() != null && val > currentNode.getVal())
+            findInsert(val, currentNode.getRight());
+        else if (val > currentNode.getVal())
+            currentNode.setRight(new BSTNode(val));
+        else
+            currentNode.setLeft(new BSTNode(val));
     }
 
     /**
